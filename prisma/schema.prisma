@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProviderStatus {
+  ACTIVE
+  INACTIVE
+  DEPRECATED
+  TESTING
+}
+
+enum PricingType {
+  TOKEN_BASED
+  PER_REQUEST
+  SUBSCRIPTION
+  FREE
+}
+
+enum PriceChangeType {
+  INITIAL
+  INCREASE
+  DECREASE
+  NO_CHANGE
+}
+
+enum ProbeType {
+  HEALTH_CHECK
+  MODEL_LIST
+  API_CALL
+  PRICING_CHECK
+}
+
+enum ProbeMethod {
+  MANUAL
+  SCHEDULED
+  ON_DEMAND
+}
+
+model Provider {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  website     String
+  apiBaseUrl  String?
+  description String?
+
+  logoUrl     String?
+  country     String?
+  founded     DateTime?
+
+  contactEmail String?
+  documentationUrl String?
+  discordUrl  String?
+
+  status      ProviderStatus @default(ACTIVE)
+  addedAt     DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  models      ProviderModel[]
+  reviews     Review[]
+  probes      AvailabilityProbe[]
+  priceHistory PriceHistory[]
+
+  @@index([status])
+  @@index([slug])
+}
+
+model Model {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  displayName String
+  family      String
+  provider    String
+
+  contextWindow Int?
+  maxOutput   Int?
+  modality    String[]
+
+  description String?
+  releasedAt  DateTime?
+  deprecated  Boolean @default(false)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  providerModels ProviderModel[]
+
+  @@index([family])
+  @@index([provider])
+}
+
+model ProviderModel {
+  id          String   @id @default(cuid())
+  providerId  String
+  provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  modelId     String
+  model       Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  providerModelName String
+
+  inputPricePerMillion  Decimal?  @db.Decimal(10, 6)
+  outputPricePerMillion Decimal?  @db.Decimal(10, 6)
+  currency    String    @default("USD")
+
+  pricingType    PricingType @default(TOKEN_BASED)
+  perRequestPrice Decimal?   @db.Decimal(10, 6)
+
+  isAvailable    Boolean @default(true)
+  lastCheckedAt  DateTime?
+
+  notes          String?
+  addedAt        DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  priceHistory   PriceHistory[]
+  probes         AvailabilityProbe[]
+
+  @@unique([providerId, modelId])
+  @@index([providerId])
+  @@index([modelId])
+  @@index([isAvailable])
+}
+
+model PriceHistory {
+  id          String   @id @default(cuid())
+
+  providerId  String
+  provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  providerModelId String
+  providerModel   ProviderModel @relation(fields: [providerModelId], references: [id], onDelete: Cascade)
+
+  inputPricePerMillion  Decimal?  @db.Decimal(10, 6)
+  outputPricePerMillion Decimal?  @db.Decimal(10, 6)
+  currency              String
+
+  changeType    PriceChangeType
+  changePercent Decimal?        @db.Decimal(5, 2)
+
+  recordedAt    DateTime @default(now())
+  notes         String?
+
+  @@index([providerModelId, recordedAt])
+  @@index([recordedAt])
+}
+
+model AvailabilityProbe {
+  id          String   @id @default(cuid())
+
+  providerId  String
+  provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  providerModelId String?
+  providerModel   ProviderModel? @relation(fields: [providerModelId], references: [id], onDelete: Cascade)
+
+  probeType   ProbeType
+  isSuccessful Boolean
+  responseTime Int?
+  statusCode  Int?
+  errorMessage String?
+
+  probedAt    DateTime @default(now())
+  probeMethod ProbeMethod @default(MANUAL)
+
+  @@index([providerId, probedAt])
+  @@index([providerModelId, probedAt])
+  @@index([probedAt])
+}
+
+model Review {
+  id          String   @id @default(cuid())
+
+  providerId  String
+  provider    Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  rating      Int
+  title       String?
+  content     String
+
+  pros        String[]
+  cons        String[]
+
+  reviewerName String?
+  reviewerRole String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([providerId])
+  @@index([rating])
+}
