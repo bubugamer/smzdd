@@ -42,7 +42,14 @@ cp .env.example .env
 npx prisma migrate dev --name init
 ```
 
-### 5. 启动开发服务器
+### 5. 校验并导入标准 JSON 数据
+
+```bash
+npm run data:validate
+npm run data:seed
+```
+
+### 6. 启动开发服务器
 
 ```bash
 npm run dev
@@ -71,6 +78,22 @@ smzdd/
 - [x] 阶段1: 基础搭建与手动数据录入（第1-2周）
 - [ ] 阶段2: 数据收集与增强功能（第3-4周）
 - [ ] 阶段3: 自动化探针与监控（第5-6周）
+
+## 标准数据维护（JSON）
+
+标准基础数据维护在 `data/` 目录：
+
+- `data/providers.json`：供应商主数据（内嵌 `tags` 与 `models`）
+- `data/model-catalog.json`：模型标准字典
+- `data/scoring-config.json`：评分配置
+- `data/seed-metadata.json`：数据版本与来源信息
+
+建议流程：
+
+1. 修改 `data/*.json`
+2. 执行 `npm run data:validate`
+3. 执行 `npm run data:seed`
+4. 启动项目验证页面和接口
 
 ## License
 

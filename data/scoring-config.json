@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "formula": "composite = (priceScore*priceWeight + uptimeScore*uptimeWeight + reviewScore*reviewWeight)",
+  "weights": {
+    "priceWeight": 0.4,
+    "uptimeWeight": 0.35,
+    "reviewWeight": 0.25
+  },
+  "notes": "Used for ranking explanations and future scoring jobs"
+}

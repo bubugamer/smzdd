@@ -6,25 +6,39 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test tests/*.test.mjs",
+    "test:smoke": "node scripts/smoke-test.js",
+    "quality:check": "npm run data:validate && npm run lint && npm run test && npm run build",
+    "data:validate": "node scripts/validate-data.js",
+    "data:seed": "npm run data:validate && node prisma/seed.js",
+    "worker:probes": "node scripts/probe-worker.js",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "npm run data:seed",
+    "db:reset": "prisma migrate reset --force && npm run db:seed"
   },
   "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "axios": "^1.7.0",
+    "bullmq": "^5.67.3",
+    "ioredis": "^5.9.2",
     "next": "^14.2.0",
+    "papaparse": "^5.5.3",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "@prisma/client": "^5.20.0",
-    "axios": "^1.7.0"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.0.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.2.0",
-    "prisma": "^5.20.0"
+    "postcss": "^8.4.0",
+    "prisma": "^5.20.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.0.0"
   }
 }

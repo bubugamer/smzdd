@@ -1,0 +1,10 @@
+{
+  "dataset": "smzdd-standard-data",
+  "version": "2026.02.09",
+  "updatedAt": "2026-02-09T00:00:00Z",
+  "maintainers": ["smzdd-team"],
+  "sources": [
+    "docs/research/helpaio-analysis.md",
+    "docs/research/cheapai-analysis.md"
+  ]
+}

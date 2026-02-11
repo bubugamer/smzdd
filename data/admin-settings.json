@@ -1,0 +1,8 @@
+{
+  "probeScheduler": {
+    "enabled": false,
+    "intervalMinutes": 30,
+    "timeoutMs": 8000,
+    "maxJobsPerSweep": 200
+  }
+}

@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMZDD Prototype v2</title>
+    <style>
+      :root {
+        --bg-page: #f8f7f6;
+        --bg-surface: #ffffff;
+        --brand: #e23b3b;
+        --brand-hover: #c92d2d;
+        --text-primary: #111827;
+        --text-secondary: #6b7280;
+        --border-default: #e5e7eb;
+        --border-strong: #d1d5db;
+        --success-bg: #ecfdf5;
+        --success-text: #059669;
+        --warn-bg: #fffbeb;
+        --warn-text: #b45309;
+        --danger-bg: #fef2f2;
+        --danger-text: #dc2626;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", sans-serif;
+        background: var(--bg-page);
+        color: var(--text-primary);
+      }
+
+      .hero {
+        border-bottom: 1px solid var(--border-default);
+        background: var(--bg-surface);
+        padding: 24px;
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: -0.3px;
+      }
+
+      .hero .subtitle {
+        margin-top: 8px;
+        color: var(--text-secondary);
+      }
+
+      .chips {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip {
+        border: 1px solid var(--border-default);
+        background: #fff;
+        color: var(--text-secondary);
+        border-radius: 999px;
+        font-size: 12px;
+        padding: 4px 10px;
+      }
+
+      .chip.brand {
+        border-color: #fecaca;
+        color: var(--brand);
+        background: #fef2f2;
+      }
+
+      .screens {
+        padding: 20px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .screen {
+        border: 1px solid var(--border-default);
+        border-radius: 12px;
+        background: var(--bg-surface);
+        overflow: hidden;
+      }
+
+      .screen-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-default);
+        background: #fafafa;
+      }
+
+      .screen-head b {
+        font-size: 14px;
+      }
+
+      .tag {
+        font-size: 11px;
+        border: 1px solid var(--border-default);
+        border-radius: 999px;
+        padding: 2px 8px;
+        color: var(--text-secondary);
+        background: #fff;
+      }
+
+      .tag.mvp {
+        border-color: #fecaca;
+        color: var(--brand);
+        background: #fef2f2;
+      }
+
+      .canvas {
+        padding: 14px;
+      }
+
+      .topbar {
+        min-height: 44px;
+        border: 1px solid var(--border-default);
+        border-radius: 8px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 10px;
+        gap: 8px;
+      }
+
+      .tb-left,
+      .tb-right {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .pill {
+        font-size: 12px;
+        border: 1px solid var(--border-default);
+        background: #fff;
+        border-radius: 999px;
+        padding: 4px 10px;
+        color: var(--text-secondary);
+      }
+
+      .pill.brand {
+        border-color: #fecaca;
+        background: #fef2f2;
+        color: var(--brand);
+      }
+
+      .grid-4 {
+        margin-top: 10px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .grid-main {
+        margin-top: 10px;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 2fr 1fr;
+      }
+
+      .metric,
+      .block,
+      .table,
+      .list {
+        border: 1px solid var(--border-default);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .metric {
+        padding: 10px;
+      }
+
+      .metric .label {
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+
+      .metric .value {
+        margin-top: 6px;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .metric .delta {
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
+      .up {
+        color: var(--success-text);
+      }
+
+      .down {
+        color: var(--danger-text);
+      }
+
+      .block,
+      .table,
+      .list {
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .sub {
+        margin-top: 4px;
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+
+      .rows {
+        margin-top: 8px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid var(--border-default);
+        border-radius: 6px;
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .badge {
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 11px;
+      }
+
+      .ok {
+        color: var(--success-text);
+        background: var(--success-bg);
+      }
+
+      .warn {
+        color: var(--warn-text);
+        background: var(--warn-bg);
+      }
+
+      .danger {
+        color: var(--danger-text);
+        background: var(--danger-bg);
+      }
+
+      .chart {
+        margin-top: 8px;
+        min-height: 118px;
+        border: 1px dashed var(--border-strong);
+        border-radius: 6px;
+        padding: 8px;
+      }
+
+      .bars {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 4px;
+        align-items: end;
+        height: 90px;
+      }
+
+      .bar {
+        background: #fca5a5;
+        border-radius: 3px 3px 0 0;
+      }
+
+      .bar.highlight {
+        background: var(--brand);
+      }
+
+      .mini-table {
+        margin-top: 8px;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+
+      .mini-table th,
+      .mini-table td {
+        border-bottom: 1px solid var(--border-default);
+        text-align: left;
+        padding: 6px;
+      }
+
+      .mini-table th {
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 11px;
+        background: #fafafa;
+      }
+
+      .mini-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .item {
+        border: 1px solid var(--border-default);
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 12px;
+      }
+
+      @media (max-width: 1000px) {
+        .grid-main {
+          grid-template-columns: 1fr;
+        }
+
+        .grid-4 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .hero {
+          padding: 18px;
+        }
+
+        .hero h1 {
+          font-size: 24px;
+        }
+
+        .screens {
+          padding: 12px;
+        }
+
+        .grid-4 {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <h1>SMZDD 页面原型（v2）</h1>
+      <div class="subtitle">红白主色调，维持你已确认的布局结构，补充业务元素密度。</div>
+      <div class="chips">
+        <span class="chip brand">Primary: #E23B3B</span>
+        <span class="chip">Surface: #FFFFFF</span>
+        <span class="chip">Page: #F8F7F6</span>
+        <span class="chip">Border: #E5E7EB</span>
+      </div>
+    </section>
+
+    <main class="screens">
+      <article class="screen">
+        <div class="screen-head"><b>1. Dashboard `/`</b><span class="tag mvp">MVP</span></div>
+        <div class="canvas">
+          <div class="topbar">
+            <div class="tb-left"><span class="pill brand">全局总览</span><span class="pill">最近7天</span><span class="pill">仅活跃服务商</span></div>
+            <div class="tb-right"><span class="pill">导出周报</span><span class="pill">刷新数据</span></div>
+          </div>
+          <div class="grid-4">
+            <div class="metric"><div class="label">服务商总数</div><div class="value">17</div><div class="delta up">+2 本周</div></div>
+            <div class="metric"><div class="label">活跃模型</div><div class="value">206</div><div class="delta up">+14 本周</div></div>
+            <div class="metric"><div class="label">3日可用率</div><div class="value">99.21%</div><div class="delta down">-0.13%</div></div>
+            <div class="metric"><div class="label">24h调价次数</div><div class="value">12</div><div class="delta up">+5</div></div>
+          </div>
+          <div class="grid-main">
+            <div class="block">
+              <div class="title">价格波动趋势</div>
+              <div class="sub">按热门模型聚合（Claude / GPT / Gemini）</div>
+              <div class="chart"><div class="bars"><div class="bar" style="height:24%"></div><div class="bar" style="height:36%"></div><div class="bar" style="height:42%"></div><div class="bar" style="height:58%"></div><div class="bar highlight" style="height:70%"></div><div class="bar" style="height:40%"></div><div class="bar" style="height:52%"></div><div class="bar" style="height:63%"></div><div class="bar" style="height:44%"></div><div class="bar" style="height:50%"></div></div></div>
+            </div>
+            <div class="block">
+              <div class="title">Top 服务商</div>
+              <div class="rows">
+                <div class="row"><span>Packy Code</span><span class="badge ok">91.04</span></div>
+                <div class="row"><span>Micu</span><span class="badge ok">85.19</span></div>
+                <div class="row"><span>Cubence</span><span class="badge warn">82.71</span></div>
+                <div class="row"><span>Right Code</span><span class="badge warn">81.88</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="screen-head"><b>2. 服务商列表 `/providers`</b><span class="tag mvp">MVP</span></div>
+        <div class="canvas">
+          <div class="topbar"><div class="tb-left"><span class="pill">搜索服务商</span><span class="pill">模型类型: Claude</span><span class="pill">可用率≥99%</span><span class="pill">计费模式: 按Token</span></div><div class="tb-right"><span class="pill brand">排序: 综合评分</span></div></div>
+          <div class="table">
+            <table class="mini-table">
+              <thead><tr><th>服务商</th><th>综合评分</th><th>3日可用率</th><th>输入价</th><th>输出价</th><th>标签</th><th>操作</th></tr></thead>
+              <tbody>
+                <tr><td>Packy Code</td><td>91.04</td><td>99.77%</td><td>¥4.5</td><td>¥22.5</td><td><span class="badge ok">高稳定</span></td><td>查看详情</td></tr>
+                <tr><td>Micu</td><td>85.19</td><td>99.42%</td><td>¥2.55</td><td>¥12.75</td><td><span class="badge warn">性价比</span></td><td>查看详情</td></tr>
+                <tr><td>Cubence</td><td>82.71</td><td>99.41%</td><td>¥4.5</td><td>¥22.5</td><td><span class="badge warn">均衡型</span></td><td>查看详情</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article class="screen">
+        <div class="screen-head"><b>3. 服务商详情 `/providers/[slug]`</b><span class="tag mvp">MVP</span></div>
+        <div class="canvas">
+          <div class="topbar"><div class="tb-left"><span class="pill brand">Packy Code</span><span class="pill">中国</span><span class="pill">ACTIVE</span></div><div class="tb-right"><span class="pill">官网</span><span class="pill">文档</span></div></div>
+          <div class="grid-main">
+            <div class="block"><div class="title">服务商画像</div><div class="rows"><div class="row"><span>综合评分</span><span>91.04</span></div><div class="row"><span>评分构成</span><span>价格40% 稳定35% 口碑25%</span></div><div class="row"><span>支付方式</span><span>支付宝 / 微信 / 银行卡</span></div><div class="row"><span>优势</span><span>高可用、高缓存命中</span></div></div></div>
+            <div class="block"><div class="title">实时状态</div><div class="rows"><div class="row"><span>3日可用率</span><span class="badge ok">99.77%</span></div><div class="row"><span>P95响应</span><span>842ms</span></div><div class="row"><span>异常事件</span><span class="badge danger">2 起</span></div></div></div>
+          </div>
+          <div class="table"><div class="title">支持模型与当前定价</div><table class="mini-table"><thead><tr><th>模型</th><th>输入价(百万)</th><th>输出价(百万)</th><th>更新时间</th><th>可用状态</th></tr></thead><tbody><tr><td>Claude Sonnet</td><td>¥4.5</td><td>¥22.5</td><td>10:32</td><td><span class="badge ok">可用</span></td></tr><tr><td>GPT-4o</td><td>¥8.2</td><td>¥24.8</td><td>10:15</td><td><span class="badge ok">可用</span></td></tr><tr><td>Gemini Pro</td><td>¥3.3</td><td>¥11.1</td><td>09:58</td><td><span class="badge warn">波动</span></td></tr></tbody></table></div>
+          <div class="table"><div class="title">用户评价</div><div class="rows"><div class="row"><span>“稳定性很强，企业项目可用”</span><span>4.8/5</span></div><div class="row"><span>“价格略高但省心”</span><span>4.5/5</span></div></div></div>
+        </div>
+      </article>
+
+      <article class="screen"><div class="screen-head"><b>4. 模型列表 `/models`</b><span class="tag mvp">MVP</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">搜索模型</span><span class="pill">Family: Claude</span><span class="pill">支持服务商≥3</span></div><div class="tb-right"><span class="pill">排序: 热度</span></div></div><div class="grid-main"><div class="table"><div class="title">模型卡片墙</div><div class="rows"><div class="row"><span>Claude 3.5 Sonnet</span><span>支持 12 家</span></div><div class="row"><span>GPT-4o</span><span>支持 14 家</span></div><div class="row"><span>Gemini Pro</span><span>支持 9 家</span></div><div class="row"><span>Claude Haiku</span><span>支持 8 家</span></div></div></div><div class="block"><div class="title">最新更新</div><div class="rows"><div class="row"><span>新上线: o4-mini</span><span>11:20</span></div><div class="row"><span>下线: legacy-gpt</span><span>10:41</span></div><div class="row"><span>价格刷新: sonnet</span><span>10:12</span></div></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>5. 模型价格对比 `/models/[id]`</b><span class="tag mvp">MVP</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill brand">Claude 3.5 Sonnet</span><span class="pill">币种: CNY</span><span class="pill">近30天</span></div><div class="tb-right"><span class="pill">导出CSV</span></div></div><div class="table"><table class="mini-table"><thead><tr><th>服务商</th><th>输入价</th><th>输出价</th><th>可用率</th><th>更新时间</th><th>建议</th></tr></thead><tbody><tr><td>Micu</td><td>¥2.55</td><td>¥12.75</td><td>99.42%</td><td>10:25</td><td><span class="badge ok">最低价</span></td></tr><tr><td>Packy Code</td><td>¥4.5</td><td>¥22.5</td><td>99.77%</td><td>10:32</td><td><span class="badge warn">最稳</span></td></tr><tr><td>Cubence</td><td>¥4.5</td><td>¥22.5</td><td>99.41%</td><td>10:21</td><td><span class="badge warn">均衡</span></td></tr></tbody></table></div><div class="grid-main"><div class="block"><div class="title">价格趋势</div><div class="chart"><div class="bars"><div class="bar" style="height:45%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:52%"></div><div class="bar highlight" style="height:58%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:56%"></div><div class="bar" style="height:54%"></div><div class="bar" style="height:53%"></div><div class="bar" style="height:55%"></div></div></div></div><div class="block"><div class="title">智能建议</div><div class="rows"><div class="row"><span>预算优先</span><span>Micu</span></div><div class="row"><span>稳定优先</span><span>Packy</span></div><div class="row"><span>综合最优</span><span>Packy / Micu</span></div></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>6. 排行榜 `/rankings`</b><span class="tag mvp">MVP</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill brand">综合评分榜</span><span class="pill">稳定性榜</span><span class="pill">性价比榜</span></div><div class="tb-right"><span class="pill">评分说明</span></div></div><div class="grid-4"><div class="metric"><div class="label">综合榜第一</div><div class="value">Packy</div><div class="delta up">91.04</div></div><div class="metric"><div class="label">稳定榜第一</div><div class="value">Packy</div><div class="delta up">99.77%</div></div><div class="metric"><div class="label">性价比第一</div><div class="value">Micu</div><div class="delta up">¥2.55</div></div><div class="metric"><div class="label">上升最快</div><div class="value">Right</div><div class="delta up">+3.2</div></div></div><div class="table"><table class="mini-table"><thead><tr><th>排名</th><th>服务商</th><th>综合分</th><th>价格分</th><th>稳定分</th><th>口碑分</th></tr></thead><tbody><tr><td>#1</td><td>Packy Code</td><td>91.04</td><td>82</td><td>98</td><td>89</td></tr><tr><td>#2</td><td>Micu</td><td>85.19</td><td>95</td><td>93</td><td>79</td></tr><tr><td>#3</td><td>Cubence</td><td>82.71</td><td>80</td><td>92</td><td>81</td></tr></tbody></table></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>7. 价格趋势 `/price-trends`</b><span class="tag mvp">MVP</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">模型: Claude Sonnet</span><span class="pill">服务商: 全部</span><span class="pill">时间: 30天</span></div><div class="tb-right"><span class="pill brand">显示涨跌提醒</span></div></div><div class="grid-main"><div class="block"><div class="title">趋势主图</div><div class="chart"><div class="bars"><div class="bar" style="height:30%"></div><div class="bar" style="height:35%"></div><div class="bar" style="height:38%"></div><div class="bar" style="height:42%"></div><div class="bar highlight" style="height:55%"></div><div class="bar" style="height:62%"></div><div class="bar" style="height:58%"></div><div class="bar" style="height:52%"></div><div class="bar" style="height:46%"></div><div class="bar" style="height:40%"></div></div></div></div><div class="block"><div class="title">预警</div><div class="rows"><div class="row"><span>10:32 Packy 上调 2.3%</span><span class="badge warn">提醒</span></div><div class="row"><span>09:20 Micu 下调 4.1%</span><span class="badge ok">机会</span></div><div class="row"><span>昨日 Cubence 波动异常</span><span class="badge danger">关注</span></div></div></div></div><div class="table"><div class="title">价格变更时间线</div><div class="rows"><div class="row"><span>2026-02-08 10:32</span><span>Packy: 输入 4.4 -> 4.5</span></div><div class="row"><span>2026-02-08 09:20</span><span>Micu: 输出 13.2 -> 12.75</span></div><div class="row"><span>2026-02-07 18:11</span><span>Cubence: 输入 4.3 -> 4.5</span></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>8. 监控大盘 `/monitoring`</b><span class="tag mvp">MVP</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill brand">探针总览</span><span class="pill">窗口: 24h</span><span class="pill">探针类型: API_CALL</span></div><div class="tb-right"><span class="pill">立即探测</span></div></div><div class="grid-4"><div class="metric"><div class="label">整体可用率</div><div class="value">99.12%</div><div class="delta down">-0.26%</div></div><div class="metric"><div class="label">P95 响应</div><div class="value">948ms</div><div class="delta up">+44ms</div></div><div class="metric"><div class="label">失败率</div><div class="value">0.88%</div><div class="delta down">+0.15%</div></div><div class="metric"><div class="label">异常事件</div><div class="value">7</div><div class="delta down">+3</div></div></div><div class="grid-main"><div class="block"><div class="title">成功率趋势</div><div class="chart"><div class="bars"><div class="bar" style="height:88%"></div><div class="bar" style="height:84%"></div><div class="bar" style="height:90%"></div><div class="bar" style="height:87%"></div><div class="bar highlight" style="height:82%"></div><div class="bar" style="height:86%"></div><div class="bar" style="height:89%"></div><div class="bar" style="height:91%"></div><div class="bar" style="height:88%"></div><div class="bar" style="height:92%"></div></div></div></div><div class="block"><div class="title">异常事件流</div><div class="rows"><div class="row"><span>Packy / API_CALL / 502</span><span class="badge danger">10:21</span></div><div class="row"><span>Micu / HEALTH / timeout</span><span class="badge warn">10:13</span></div><div class="row"><span>Cubence / MODEL_LIST / 429</span><span class="badge warn">09:55</span></div></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>9. 后台首页 `/admin`</b><span class="tag">增强</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill brand">运营后台</span><span class="pill">今天</span></div><div class="tb-right"><span class="pill">导出日报</span></div></div><div class="grid-main"><div class="table"><div class="title">待处理任务</div><table class="mini-table"><thead><tr><th>任务</th><th>类型</th><th>状态</th><th>操作</th></tr></thead><tbody><tr><td>csv_import_021</td><td>导入</td><td><span class="badge danger">失败</span></td><td>重试</td></tr><tr><td>probe_batch_178</td><td>探针</td><td><span class="badge warn">部分失败</span></td><td>查看</td></tr><tr><td>rank_recalc</td><td>评分</td><td><span class="badge ok">完成</span></td><td>日志</td></tr></tbody></table></div><div class="block"><div class="title">系统健康</div><div class="rows"><div class="row"><span>PostgreSQL</span><span class="badge ok">Healthy</span></div><div class="row"><span>Redis</span><span class="badge ok">Healthy</span></div><div class="row"><span>Worker Queue</span><span class="badge warn">Lag 12</span></div></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>10. 定价管理 `/admin/pricing`</b><span class="tag">增强</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">批量导入CSV</span><span class="pill">单条编辑</span></div><div class="tb-right"><span class="pill brand">提交变更</span></div></div><div class="list"><div class="item"><b>导入区</b><div class="sub">拖拽 CSV / 模板下载 / 字段映射校验</div></div><div class="item"><b>编辑区</b><div class="sub">provider + model + input/output + currency + pricingType</div></div><div class="item"><b>Diff 预览</b><div class="sub">变更前后对比，异常涨跌高亮</div></div><div class="item"><b>历史写入</b><div class="sub">提交后自动写入 PriceHistory</div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>11. 登录页 `/admin/login`</b><span class="tag">增强</span></div><div class="canvas"><div class="grid-main"><div class="block"><div class="title">品牌介绍区</div><div class="sub">SMZDD 运维与数据管理后台</div><div class="rows"><div class="row"><span>权限控制</span><span>RBAC</span></div><div class="row"><span>二次验证</span><span>邮箱OTP</span></div></div></div><div class="block"><div class="title">登录表单</div><div class="rows"><div class="row"><span>邮箱</span><span>admin@...</span></div><div class="row"><span>验证码</span><span>******</span></div><div class="row"><span>操作</span><span class="badge ok">登录</span></div></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>12. 服务商管理 `/admin/providers`</b><span class="tag">增强</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">新增服务商</span><span class="pill">状态筛选</span></div><div class="tb-right"><span class="pill">批量下线</span></div></div><div class="table"><table class="mini-table"><thead><tr><th>名称</th><th>slug</th><th>状态</th><th>联系</th><th>更新时间</th><th>操作</th></tr></thead><tbody><tr><td>Packy Code</td><td>packy-code</td><td><span class="badge ok">ACTIVE</span></td><td>ops@packyapi.com</td><td>10:30</td><td>编辑</td></tr><tr><td>Micu</td><td>micu</td><td><span class="badge ok">ACTIVE</span></td><td>team@micu.cn</td><td>10:12</td><td>编辑</td></tr><tr><td>Test Provider</td><td>test-provider</td><td><span class="badge warn">TESTING</span></td><td>qa@xxx.com</td><td>09:40</td><td>编辑</td></tr></tbody></table></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>13. 模型管理 `/admin/models`</b><span class="tag">增强</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">新增模型</span><span class="pill">family筛选</span><span class="pill">deprecated筛选</span></div><div class="tb-right"><span class="pill">导入模型字典</span></div></div><div class="table"><table class="mini-table"><thead><tr><th>模型</th><th>family</th><th>provider</th><th>context</th><th>deprecated</th><th>操作</th></tr></thead><tbody><tr><td>Claude 3.5 Sonnet</td><td>Claude</td><td>Anthropic</td><td>200k</td><td>否</td><td>编辑</td></tr><tr><td>GPT-4o</td><td>GPT</td><td>OpenAI</td><td>128k</td><td>否</td><td>编辑</td></tr><tr><td>legacy-gpt</td><td>GPT</td><td>OpenAI</td><td>32k</td><td>是</td><td>恢复</td></tr></tbody></table></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>14. 探针任务管理 `/admin/probes`</b><span class="tag">增强</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">新建任务</span><span class="pill">按类型筛选</span><span class="pill">按频率筛选</span></div><div class="tb-right"><span class="pill brand">立即执行</span></div></div><div class="grid-main"><div class="table"><table class="mini-table"><thead><tr><th>任务ID</th><th>类型</th><th>频率</th><th>最近状态</th><th>失败重试</th></tr></thead><tbody><tr><td>probe_001</td><td>HEALTH_CHECK</td><td>5m</td><td><span class="badge ok">成功</span></td><td>0</td></tr><tr><td>probe_045</td><td>API_CALL</td><td>10m</td><td><span class="badge warn">超时</span></td><td>2</td></tr><tr><td>probe_112</td><td>PRICING_CHECK</td><td>30m</td><td><span class="badge ok">成功</span></td><td>0</td></tr></tbody></table></div><div class="block"><div class="title">告警策略</div><div class="rows"><div class="row"><span>连续失败阈值</span><span>3 次</span></div><div class="row"><span>通知渠道</span><span>邮件 + Webhook</span></div><div class="row"><span>重试退避</span><span>2x backoff</span></div></div></div></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>15. 评价管理 `/admin/reviews`</b><span class="tag">增强</span></div><div class="canvas"><div class="topbar"><div class="tb-left"><span class="pill">待审核</span><span class="pill">按评分筛选</span><span class="pill">按服务商筛选</span></div><div class="tb-right"><span class="pill">批量通过</span></div></div><div class="table"><table class="mini-table"><thead><tr><th>评价</th><th>服务商</th><th>评分</th><th>状态</th><th>提交时间</th><th>操作</th></tr></thead><tbody><tr><td>稳定但偏贵</td><td>Packy</td><td>4.5</td><td><span class="badge warn">待审核</span></td><td>10:18</td><td>通过/驳回</td></tr><tr><td>价格低，偶发抖动</td><td>Micu</td><td>4.2</td><td><span class="badge ok">已通过</span></td><td>09:44</td><td>编辑</td></tr><tr><td>缓存不稳定</td><td>Cubence</td><td>3.8</td><td><span class="badge danger">已驳回</span></td><td>09:10</td><td>查看原因</td></tr></tbody></table></div></div></article>
+
+      <article class="screen"><div class="screen-head"><b>16. 系统设置 `/admin/settings`</b><span class="tag">增强</span></div><div class="canvas"><div class="list"><div class="item"><b>评分权重</b><div class="sub">价格 40% | 稳定性 35% | 口碑 25%</div></div><div class="item"><b>汇率配置</b><div class="sub">CNY / USD 自动同步 + 手动覆盖</div></div><div class="item"><b>监控阈值</b><div class="sub">可用率低于 98.5% 触发告警</div></div><div class="item"><b>通知渠道</b><div class="sub">邮件、Webhook、企业IM</div></div></div></div></article>
+    </main>
+  </body>
+</html>
