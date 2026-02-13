@@ -22,14 +22,14 @@ export function Panel({ title, children, action }: { title: string; children: Re
   );
 }
 
-export function SimpleTable({ headers, rows }: { headers: string[]; rows: string[][] }) {
+export function SimpleTable({ headers, rows }: { headers: ReactNode[]; rows: ReactNode[][] }) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200 text-sm">
         <thead className="bg-gray-50">
           <tr>
-            {headers.map((header) => (
-              <th key={header} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+            {headers.map((header, idx) => (
+              <th key={`header-${idx}`} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
                 {header}
               </th>
             ))}
@@ -37,9 +37,9 @@ export function SimpleTable({ headers, rows }: { headers: string[]; rows: string
         </thead>
         <tbody className="divide-y divide-gray-100 bg-white">
           {rows.map((row, idx) => (
-            <tr key={`${row.join("-")}-${idx}`}>
+            <tr key={`row-${idx}`}>
               {row.map((cell, cellIdx) => (
-                <td key={`${cell}-${cellIdx}`} className="px-3 py-2 text-gray-700">
+                <td key={`cell-${idx}-${cellIdx}`} className="px-3 py-2 text-gray-700">
                   {cell}
                 </td>
               ))}

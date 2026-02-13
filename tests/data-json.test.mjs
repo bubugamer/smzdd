@@ -63,4 +63,21 @@ test("admin settings should contain valid scheduler fields", () => {
   assert.equal(typeof settings.probeScheduler.timeoutMs, "number");
   assert.equal(typeof settings.probeScheduler.maxJobsPerSweep, "number");
   assert.ok(settings.probeScheduler.intervalMinutes >= 5);
+  assert.equal(typeof settings.sampleModel, "string");
+  assert.ok(settings.sampleModel.length > 0);
+});
+
+test("new providers should be included with non-empty model lists", () => {
+  const providers = readJson("data/providers.json");
+  const providerMap = new Map(providers.map((item) => [item.slug, item]));
+
+  const autocode = providerMap.get("autocode-space");
+  assert.ok(autocode, "autocode-space should exist");
+  assert.equal(autocode.website, "https://api.autocode.space");
+  assert.ok(Array.isArray(autocode.models) && autocode.models.length >= 4);
+
+  const vbcode = providerMap.get("vbcode");
+  assert.ok(vbcode, "vbcode should exist");
+  assert.equal(vbcode.website, "https://vbcode.io");
+  assert.ok(Array.isArray(vbcode.models) && vbcode.models.length >= 10);
 });

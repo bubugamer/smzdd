@@ -4,5 +4,6 @@
     "intervalMinutes": 30,
     "timeoutMs": 8000,
     "maxJobsPerSweep": 200
-  }
+  },
+  "sampleModel": "gpt-5.2"
 }

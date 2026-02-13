@@ -104,5 +104,145 @@
     ],
     "description": "Claude Sonnet 4.5 stable version",
     "deprecated": false
+  },
+  {
+    "name": "claude-opus-4-5-20251101",
+    "displayName": "Claude Opus 4.5 (2025-11-01)",
+    "family": "Claude 4.5",
+    "provider": "Anthropic",
+    "contextWindow": 200000,
+    "maxOutput": 8192,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "Claude Opus 4.5 version 2025-11-01",
+    "deprecated": false
+  },
+  {
+    "name": "claude-opus-4-6",
+    "displayName": "Claude Opus 4.6",
+    "family": "Claude 4.6",
+    "provider": "Anthropic",
+    "contextWindow": 200000,
+    "maxOutput": 8192,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "Claude Opus 4.6",
+    "deprecated": false
+  },
+  {
+    "name": "claude-haiku-4-5-20251001",
+    "displayName": "Claude Haiku 4.5 (2025-10-01)",
+    "family": "Claude 4.5",
+    "provider": "Anthropic",
+    "contextWindow": 200000,
+    "maxOutput": 8192,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "Claude Haiku 4.5 version 2025-10-01",
+    "deprecated": false
+  },
+  {
+    "name": "gpt-5",
+    "displayName": "GPT-5",
+    "family": "GPT-5",
+    "provider": "OpenAI",
+    "contextWindow": 400000,
+    "maxOutput": 131072,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "General GPT-5 model",
+    "deprecated": false
+  },
+  {
+    "name": "gpt-5-codex",
+    "displayName": "GPT-5 Codex",
+    "family": "GPT-5",
+    "provider": "OpenAI",
+    "contextWindow": 400000,
+    "maxOutput": 131072,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "GPT-5 codex model",
+    "deprecated": false
+  },
+  {
+    "name": "gpt-5.3-codex",
+    "displayName": "GPT-5.3 Codex",
+    "family": "GPT-5.3",
+    "provider": "OpenAI",
+    "contextWindow": 400000,
+    "maxOutput": 131072,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "GPT-5.3 codex model",
+    "deprecated": false
+  },
+  {
+    "name": "gpt-5.1",
+    "displayName": "GPT-5.1",
+    "family": "GPT-5.1",
+    "provider": "OpenAI",
+    "contextWindow": 400000,
+    "maxOutput": 131072,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "General GPT-5.1 model",
+    "deprecated": false
+  },
+  {
+    "name": "gpt-5.1-codex",
+    "displayName": "GPT-5.1 Codex",
+    "family": "GPT-5.1",
+    "provider": "OpenAI",
+    "contextWindow": 400000,
+    "maxOutput": 131072,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "GPT-5.1 codex model",
+    "deprecated": false
+  },
+  {
+    "name": "claude-sonnet-4-5-20250929-thinking",
+    "displayName": "Claude Sonnet 4.5 Thinking",
+    "family": "Claude 4.5",
+    "provider": "Anthropic",
+    "contextWindow": 1000000,
+    "maxOutput": 8192,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "Claude Sonnet 4.5 thinking variant",
+    "deprecated": false
+  },
+  {
+    "name": "claude-opus-4-5-20251101-thinking",
+    "displayName": "Claude Opus 4.5 Thinking",
+    "family": "Claude 4.5",
+    "provider": "Anthropic",
+    "contextWindow": 1000000,
+    "maxOutput": 8192,
+    "modality": [
+      "text",
+      "image"
+    ],
+    "description": "Claude Opus 4.5 thinking variant",
+    "deprecated": false
   }
 ]

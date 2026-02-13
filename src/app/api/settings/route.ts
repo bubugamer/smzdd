@@ -38,6 +38,7 @@ const updateSettingsSchema = z.object({
         timeoutMs: z.number().int().min(1000).max(120000),
         maxJobsPerSweep: z.number().int().min(1).max(2000),
       }),
+      sampleModel: z.string().min(1),
     })
     .optional(),
 });

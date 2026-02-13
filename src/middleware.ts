@@ -24,6 +24,11 @@ function isProtectedWriteApi(pathname: string, method: string) {
     return false;
   }
 
+  // Public review submission is allowed for anonymous users.
+  if (pathname === "/api/reviews" && method.toUpperCase() === "POST") {
+    return false;
+  }
+
   return protectedWriteApiPrefixes.some((prefix) => pathname.startsWith(prefix));
 }
 

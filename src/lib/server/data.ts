@@ -32,11 +32,29 @@ export async function getProviderUptime(providerId: string, days = 3) {
 export async function listProviders(params: {
   search?: string;
   status?: ProviderStatus;
+  selectedSlugs?: string[];
+  sortBy?:
+    | "compositeScore"
+    | "uptime3d"
+    | "inputPrice"
+    | "outputPrice"
+    | "updatedAt"
+    | "name"
+    | "sampleModel"
+    | "status";
+  sortOrder?: "asc" | "desc";
+  sampleModel?: string;
   page?: number;
   pageSize?: number;
 }) {
   const page = params.page && params.page > 0 ? params.page : 1;
   const pageSize = params.pageSize && params.pageSize > 0 ? Math.min(params.pageSize, 100) : 20;
+  const sortBy = params.sortBy ?? "compositeScore";
+  const sortOrder = params.sortOrder ?? "desc";
+  const sampleModel = params.sampleModel?.trim() || "gpt-5.2";
+  const selectedSlugs = Array.isArray(params.selectedSlugs)
+    ? params.selectedSlugs.map((slug) => slug.trim()).filter(Boolean)
+    : [];
 
   const where = {
     ...(params.search
@@ -48,28 +66,40 @@ export async function listProviders(params: {
         }
       : {}),
     ...(params.status ? { status: params.status } : {}),
+    ...(selectedSlugs.length > 0 ? { slug: { in: selectedSlugs } } : {}),
   };
 
-  const [total, providers] = await Promise.all([
-    prisma.provider.count({ where }),
-    prisma.provider.findMany({
-      where,
-      orderBy: { addedAt: "desc" },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      include: {
-        _count: { select: { models: true, reviews: true } },
-        models: {
-          take: 1,
-          orderBy: { updatedAt: "desc" },
-          select: { inputPricePerMillion: true, outputPricePerMillion: true, currency: true },
+  const providers = await prisma.provider.findMany({
+    where,
+    orderBy: [{ updatedAt: "desc" }, { name: "asc" }],
+    include: {
+      _count: { select: { models: true, reviews: true } },
+      models: {
+        where: {
+          model: {
+            name: sampleModel,
+          },
         },
-        reviews: {
-          select: { rating: true },
+        take: 1,
+        orderBy: { updatedAt: "desc" },
+        select: {
+          inputPricePerMillion: true,
+          outputPricePerMillion: true,
+          currency: true,
+          providerModelName: true,
+          model: {
+            select: {
+              name: true,
+              displayName: true,
+            },
+          },
         },
       },
-    }),
-  ]);
+      reviews: {
+        select: { rating: true },
+      },
+    },
+  });
 
   const rows = await Promise.all(
     providers.map(async (provider) => {
@@ -78,9 +108,9 @@ export async function listProviders(params: {
           ? provider.reviews.reduce((sum, review) => sum + review.rating, 0) / provider.reviews.length
           : null;
       const uptimeRate = await getProviderUptime(provider.id, 3);
-
-      const latestInputPrice = provider.models[0]
-        ? decimalToNumber(provider.models[0].inputPricePerMillion)
+      const samplePriceModel = provider.models[0];
+      const sampleInputPrice = samplePriceModel
+        ? decimalToNumber(samplePriceModel.inputPricePerMillion)
         : null;
 
       return {
@@ -93,24 +123,73 @@ export async function listProviders(params: {
         reviewCount: provider._count.reviews,
         avgRating: avgRating ? Number(avgRating.toFixed(2)) : null,
         uptime3d: Number((uptimeRate * 100).toFixed(2)),
+        updatedAt: provider.updatedAt.toISOString(),
         compositeScore: await calcCompositeScore({
           uptimeRate,
           avgRating,
-          inputPricePerMillion: latestInputPrice,
+          inputPricePerMillion: sampleInputPrice,
         }),
-        samplePricing: provider.models[0]
+        samplePricing: samplePriceModel
           ? {
-              inputPricePerMillion: decimalToNumber(provider.models[0].inputPricePerMillion),
-              outputPricePerMillion: decimalToNumber(provider.models[0].outputPricePerMillion),
-              currency: provider.models[0].currency,
+              model: samplePriceModel.model.name,
+              modelDisplayName: samplePriceModel.model.displayName,
+              providerModelName: samplePriceModel.providerModelName,
+              inputPricePerMillion: sampleInputPrice,
+              outputPricePerMillion: decimalToNumber(samplePriceModel.outputPricePerMillion),
+              currency: samplePriceModel.currency,
             }
           : null,
       };
     }),
   );
 
+  const sortedRows = rows.sort((a, b) => {
+    const direction = sortOrder === "asc" ? 1 : -1;
+    const nullSafeNumber = (left: number | null | undefined, right: number | null | undefined) => {
+      if (left == null && right == null) return 0;
+      if (left == null) return 1;
+      if (right == null) return -1;
+      return (left - right) * direction;
+    };
+    const nullSafeString = (left: string | null | undefined, right: string | null | undefined) => {
+      if (!left && !right) return 0;
+      if (!left) return 1;
+      if (!right) return -1;
+      return left.localeCompare(right) * direction;
+    };
+
+    switch (sortBy) {
+      case "name":
+        return a.name.localeCompare(b.name) * direction;
+      case "sampleModel":
+        return nullSafeString(a.samplePricing?.modelDisplayName, b.samplePricing?.modelDisplayName);
+      case "status":
+        return a.status.localeCompare(b.status) * direction;
+      case "updatedAt":
+        return (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()) * direction;
+      case "uptime3d":
+        return nullSafeNumber(a.uptime3d, b.uptime3d);
+      case "inputPrice":
+        return nullSafeNumber(
+          a.samplePricing?.inputPricePerMillion ?? null,
+          b.samplePricing?.inputPricePerMillion ?? null,
+        );
+      case "outputPrice":
+        return nullSafeNumber(
+          a.samplePricing?.outputPricePerMillion ?? null,
+          b.samplePricing?.outputPricePerMillion ?? null,
+        );
+      case "compositeScore":
+      default:
+        return nullSafeNumber(a.compositeScore, b.compositeScore);
+    }
+  });
+
+  const total = sortedRows.length;
+  const pagedRows = sortedRows.slice((page - 1) * pageSize, (page - 1) * pageSize + pageSize);
+
   return {
-    items: rows,
+    items: pagedRows,
     page,
     pageSize,
     total,

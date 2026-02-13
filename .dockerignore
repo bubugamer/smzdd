@@ -1,0 +1,12 @@
+.git
+.gitignore
+.DS_Store
+node_modules
+.next
+.next-dev
+.next-build
+npm-debug.log*
+README.md
+docs
+tests
+tmp
