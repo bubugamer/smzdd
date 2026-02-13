@@ -1712,5 +1712,226 @@
         "notes": "source:getcheapai.com(model-page,2026-02-10)"
       }
     ]
+  },
+  {
+    "name": "AutoCode Space",
+    "slug": "autocode-space",
+    "website": "https://api.autocode.space",
+    "country": "CN",
+    "status": "ACTIVE",
+    "description": "New API 聚合站点（OneDayAI）",
+    "tags": [
+      "openai-compatible",
+      "claude",
+      "pricing-2026-02-12"
+    ],
+    "models": [
+      {
+        "model": "claude-sonnet-4-5-20250929",
+        "providerModelName": "claude-sonnet-4-5-20250929",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.6,
+        "outputPricePerMillion": 3,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:api.autocode.space/api/pricing+api/status(0.2CNY/USD,2026-02-12)"
+      },
+      {
+        "model": "claude-opus-4-5-20251101",
+        "providerModelName": "claude-opus-4-5-20251101",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1,
+        "outputPricePerMillion": 5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:api.autocode.space/api/pricing+api/status(0.2CNY/USD,2026-02-12)"
+      },
+      {
+        "model": "claude-opus-4-6",
+        "providerModelName": "claude-opus-4-6",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1,
+        "outputPricePerMillion": 5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:api.autocode.space/api/pricing+api/status(0.2CNY/USD,2026-02-12)"
+      },
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "providerModelName": "claude-haiku-4-5-20251001",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.2,
+        "outputPricePerMillion": 1,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:api.autocode.space/api/pricing+api/status(0.2CNY/USD,2026-02-12)"
+      }
+    ]
+  },
+  {
+    "name": "VBCode",
+    "slug": "vbcode",
+    "website": "https://vbcode.io",
+    "country": "CN",
+    "status": "ACTIVE",
+    "description": "New API 聚合站点（vbcode.io）",
+    "tags": [
+      "openai-compatible",
+      "claude",
+      "codex",
+      "pricing-2026-02-12"
+    ],
+    "models": [
+      {
+        "model": "claude-haiku-4-5-20251001",
+        "providerModelName": "claude-haiku-4-5-20251001",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.35,
+        "outputPricePerMillion": 1.75,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "claude-sonnet-4-5-20250929",
+        "providerModelName": "claude-sonnet-4-5-20250929",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1.05,
+        "outputPricePerMillion": 5.25,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5",
+        "providerModelName": "gpt-5",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.4375,
+        "outputPricePerMillion": 3.5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5-codex",
+        "providerModelName": "gpt-5-codex",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.4375,
+        "outputPricePerMillion": 3.5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.3-codex",
+        "providerModelName": "gpt-5.3-codex",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.6125,
+        "outputPricePerMillion": 4.9,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "claude-sonnet-4-5-20250929-thinking",
+        "providerModelName": "claude-sonnet-4-5-20250929-thinking",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1.05,
+        "outputPricePerMillion": 5.25,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "claude-opus-4-5-20251101-thinking",
+        "providerModelName": "claude-opus-4-5-20251101-thinking",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1.75,
+        "outputPricePerMillion": 8.75,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "claude-opus-4-6",
+        "providerModelName": "claude-opus-4-6",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1.75,
+        "outputPricePerMillion": 8.75,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.1-codex-max",
+        "providerModelName": "gpt-5.1-codex-max",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.4375,
+        "outputPricePerMillion": 3.5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.1-codex-mini",
+        "providerModelName": "gpt-5.1-codex-mini",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.0875,
+        "outputPricePerMillion": 0.7,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.2-codex",
+        "providerModelName": "gpt-5.2-codex",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.6125,
+        "outputPricePerMillion": 4.9,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.2",
+        "providerModelName": "gpt-5.2",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.6125,
+        "outputPricePerMillion": 4.9,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "claude-opus-4-5-20251101",
+        "providerModelName": "claude-opus-4-5-20251101",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 1.75,
+        "outputPricePerMillion": 8.75,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.1",
+        "providerModelName": "gpt-5.1",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.4375,
+        "outputPricePerMillion": 3.5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      },
+      {
+        "model": "gpt-5.1-codex",
+        "providerModelName": "gpt-5.1-codex",
+        "pricingType": "TOKEN_BASED",
+        "inputPricePerMillion": 0.4375,
+        "outputPricePerMillion": 3.5,
+        "currency": "CNY",
+        "isAvailable": true,
+        "notes": "source:vbcode.io/api/pricing+api/status(groupRatio=0.35,CNY/USD=1,2026-02-12)"
+      }
+    ]
   }
 ]

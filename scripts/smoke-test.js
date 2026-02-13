@@ -107,6 +107,9 @@ async function run() {
     if (list.status !== 200 || !list.json?.data?.items?.[0]?.slug) {
       throw new Error(`provider search failed: ${list.status}`);
     }
+    if (list.json?.data?.items?.[0]?.samplePricing !== null) {
+      throw new Error("new provider should not have samplePricing for GPT-5.2 by default");
+    }
 
     const settings = await request("/api/settings", {
       headers: { cookie: authHeaders.cookie },
@@ -134,6 +137,26 @@ async function run() {
     const reviewProviderId = providerList.json?.data?.items?.[0]?.id;
     if (!reviewProviderId) {
       throw new Error("provider id not found for review test");
+    }
+
+    const sortedProviders = await request("/api/providers?page=1&pageSize=5&sortBy=inputPrice&sortOrder=asc&sampleModel=gpt-5.2", {
+      headers: { cookie: authHeaders.cookie },
+    });
+    if (sortedProviders.status !== 200 || !Array.isArray(sortedProviders.json?.data?.items)) {
+      throw new Error(`providers sort/sampleModel query failed: ${sortedProviders.status}`);
+    }
+    const firstItem = sortedProviders.json.data.items[0];
+    if (firstItem && firstItem.samplePricing && firstItem.samplePricing.model !== "gpt-5.2") {
+      throw new Error("samplePricing.model should match sampleModel=gpt-5.2");
+    }
+    if (sortedProviders.json?.data?.items?.length > 0) {
+      const selectedSlug = sortedProviders.json.data.items[0].slug;
+      const selectedOnly = await request(`/api/providers?page=1&pageSize=10&selected=${selectedSlug}`, {
+        headers: { cookie: authHeaders.cookie },
+      });
+      if (selectedOnly.status !== 200 || selectedOnly.json?.data?.items?.some((item) => item.slug !== selectedSlug)) {
+        throw new Error("selected slug filtering failed");
+      }
     }
 
     const reviewCreate = await request("/api/reviews", {

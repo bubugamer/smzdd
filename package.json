@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "NEXT_DIST_DIR=.next-dev next dev --port 3001",
+    "dev:clean": "rm -rf .next-dev && NEXT_DIST_DIR=.next-dev next dev --port 3001",
+    "build": "NEXT_DIST_DIR=.next-build next build",
+    "start": "NEXT_DIST_DIR=.next-build next start",
     "lint": "next lint",
     "test": "node --test tests/*.test.mjs",
     "test:smoke": "node scripts/smoke-test.js",

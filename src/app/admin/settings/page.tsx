@@ -21,6 +21,7 @@ type SettingsData = {
       timeoutMs: number;
       maxJobsPerSweep: number;
     };
+    sampleModel: string;
   };
   queue: {
     enabled: boolean;
@@ -29,8 +30,15 @@ type SettingsData = {
   };
 };
 
+type ModelOption = {
+  id: string;
+  name: string;
+  displayName: string;
+};
+
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SettingsData | null>(null);
+  const [modelOptions, setModelOptions] = useState<ModelOption[]>([]);
   const [queueJobs, setQueueJobs] = useState<Array<Record<string, unknown>>>([]);
   const [csvEntity, setCsvEntity] = useState("providers");
   const [csvText, setCsvText] = useState("");
@@ -38,14 +46,16 @@ export default function AdminSettingsPage() {
   const [error, setError] = useState("");
 
   async function load() {
-    const [settingsRes, jobsRes] = await Promise.all([
+    const [settingsRes, jobsRes, modelsRes] = await Promise.all([
       fetch("/api/settings", { cache: "no-store" }),
       fetch("/api/admin/jobs?queue=probe-check&state=waiting&limit=30", {
         cache: "no-store",
       }),
+      fetch("/api/models?page=1&pageSize=200", { cache: "no-store" }),
     ]);
     const settingsJson = await settingsRes.json();
     const jobsJson = await jobsRes.json();
+    const modelsJson = await modelsRes.json();
     if (settingsRes.ok) {
       setSettings(settingsJson.data);
     } else {
@@ -53,6 +63,9 @@ export default function AdminSettingsPage() {
     }
     if (jobsRes.ok) {
       setQueueJobs(jobsJson.data.items ?? []);
+    }
+    if (modelsRes.ok) {
+      setModelOptions(modelsJson.data.items ?? []);
     }
   }
 
@@ -149,16 +162,27 @@ export default function AdminSettingsPage() {
           <input className="rounded border border-gray-300 px-2 py-1 text-sm" value={settings.scoringConfig.weights.priceWeight} type="number" step="0.01" onChange={(e) => setSettings((v) => v ? ({ ...v, scoringConfig: { ...v.scoringConfig, weights: { ...v.scoringConfig.weights, priceWeight: Number(e.target.value || 0) } } }) : v)} />
           <input className="rounded border border-gray-300 px-2 py-1 text-sm" value={settings.scoringConfig.weights.uptimeWeight} type="number" step="0.01" onChange={(e) => setSettings((v) => v ? ({ ...v, scoringConfig: { ...v.scoringConfig, weights: { ...v.scoringConfig.weights, uptimeWeight: Number(e.target.value || 0) } } }) : v)} />
           <input className="rounded border border-gray-300 px-2 py-1 text-sm" value={settings.scoringConfig.weights.reviewWeight} type="number" step="0.01" onChange={(e) => setSettings((v) => v ? ({ ...v, scoringConfig: { ...v.scoringConfig, weights: { ...v.scoringConfig.weights, reviewWeight: Number(e.target.value || 0) } } }) : v)} />
+          <select className="rounded border border-gray-300 px-2 py-1 text-sm md:col-span-3" value={settings.adminSettings.sampleModel} onChange={(e) => setSettings((v) => v ? ({ ...v, adminSettings: { ...v.adminSettings, sampleModel: e.target.value } }) : v)}>
+            {modelOptions.map((item) => (
+              <option key={item.id} value={item.name}>
+                {item.displayName} ({item.name})
+              </option>
+            ))}
+            {(modelOptions.length === 0 || !modelOptions.some((item) => item.name === settings.adminSettings.sampleModel)) ? (
+              <option value={settings.adminSettings.sampleModel}>{settings.adminSettings.sampleModel}</option>
+            ) : null}
+          </select>
           <button className="rounded border border-red-200 bg-red-50 px-3 py-1 text-sm text-[#e23b3b]" type="submit">保存评分配置</button>
         </form>
         <p className="mt-2 text-xs text-gray-600">权重合计: {weightSum.toFixed(2)}（必须为 1）</p>
+        <p className="mt-1 text-xs text-gray-600">服务商列表页使用该“样例模型”计算样例价格，不支持前台手动输入。</p>
       </section>
 
       <section className="mt-4 rounded-xl border border-gray-200 bg-white p-4">
         <h2 className="mb-3 text-sm font-semibold">自动探针调度（BullMQ）</h2>
         <div className="grid gap-2 md:grid-cols-4">
-          <input className="rounded border border-gray-300 px-2 py-1 text-sm" type="number" min={5} max={1440} value={settings.adminSettings.probeScheduler.intervalMinutes} onChange={(e) => setSettings((v) => v ? ({ ...v, adminSettings: { probeScheduler: { ...v.adminSettings.probeScheduler, intervalMinutes: Number(e.target.value || 30) } } }) : v)} />
-          <input className="rounded border border-gray-300 px-2 py-1 text-sm" type="number" min={1000} max={120000} value={settings.adminSettings.probeScheduler.timeoutMs} onChange={(e) => setSettings((v) => v ? ({ ...v, adminSettings: { probeScheduler: { ...v.adminSettings.probeScheduler, timeoutMs: Number(e.target.value || 8000) } } }) : v)} />
+          <input className="rounded border border-gray-300 px-2 py-1 text-sm" type="number" min={5} max={1440} value={settings.adminSettings.probeScheduler.intervalMinutes} onChange={(e) => setSettings((v) => v ? ({ ...v, adminSettings: { ...v.adminSettings, probeScheduler: { ...v.adminSettings.probeScheduler, intervalMinutes: Number(e.target.value || 30) } } }) : v)} />
+          <input className="rounded border border-gray-300 px-2 py-1 text-sm" type="number" min={1000} max={120000} value={settings.adminSettings.probeScheduler.timeoutMs} onChange={(e) => setSettings((v) => v ? ({ ...v, adminSettings: { ...v.adminSettings, probeScheduler: { ...v.adminSettings.probeScheduler, timeoutMs: Number(e.target.value || 8000) } } }) : v)} />
           <button className="rounded border border-gray-300 px-3 py-1 text-sm" onClick={() => void updateScheduler(true)}>开启调度</button>
           <button className="rounded border border-gray-300 px-3 py-1 text-sm" onClick={() => void updateScheduler(false)}>关闭调度</button>
         </div>

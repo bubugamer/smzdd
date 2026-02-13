@@ -24,6 +24,7 @@ const schedulerSchema = z.object({
 
 const adminSettingsSchema = z.object({
   probeScheduler: schedulerSchema,
+  sampleModel: z.string().min(1).default("gpt-5.2"),
 });
 
 const scoringConfigPath = path.join(process.cwd(), "data/scoring-config.json");
@@ -36,6 +37,7 @@ const defaultAdminSettings = {
     timeoutMs: 8000,
     maxJobsPerSweep: 200,
   },
+  sampleModel: "gpt-5.2",
 };
 
 function assertWeightSum(weights: z.infer<typeof scoringWeightsSchema>) {

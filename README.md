@@ -14,48 +14,59 @@ SMZDD是一个内部AI API中转服务对比平台，用于跟踪和比较各个
 - **任务队列**: BullMQ + Redis (阶段3)
 - **部署**: Docker Compose
 
-## 快速开始
+## 快速开始（Docker）
 
-### 1. 启动数据库
+### 1. 启动全栈容器（Web + PostgreSQL + Redis + Worker）
 
 ```bash
-docker-compose up -d
+docker compose up -d --build
 ```
 
-### 2. 安装依赖
+访问地址：
 
+- 前台/后台 Web: `http://localhost:3001`
+- 健康检查: `http://localhost:3001/api/health`
+
+### 2. 查看日志
+
+```bash
+docker compose logs -f web
+docker compose logs -f worker
+```
+
+### 3. 停止容器
+
+```bash
+docker compose down
+```
+
+### 4. 清理并重建（可选）
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+## 本机开发（可选）
+
+如需本机开发调试：
+
+### 1. 仅启动基础依赖（PostgreSQL + Redis）
+```bash
+docker compose up -d postgres redis
+```
+
+### 2. 安装依赖并初始化数据
 ```bash
 npm install
-```
-
-### 3. 配置环境变量
-
-复制 `.env.example` 到 `.env` 并配置数据库连接：
-
-```bash
-cp .env.example .env
-```
-
-### 4. 运行数据库迁移
-
-```bash
-npx prisma migrate dev --name init
-```
-
-### 5. 校验并导入标准 JSON 数据
-
-```bash
-npm run data:validate
 npm run data:seed
 ```
 
-### 6. 启动开发服务器
-
+### 3. 启动开发服务器
 ```bash
 npm run dev
 ```
-
-访问 http://localhost:3000
+访问 `http://localhost:3001`
 
 ## 项目结构
 
@@ -76,8 +87,8 @@ smzdd/
 ## 开发计划
 
 - [x] 阶段1: 基础搭建与手动数据录入（第1-2周）
-- [ ] 阶段2: 数据收集与增强功能（第3-4周）
-- [ ] 阶段3: 自动化探针与监控（第5-6周）
+- [x] 阶段2: 数据收集与增强功能（第3-4周）
+- [x] 阶段3: 自动化探针与监控（第5-6周）
 
 ## 标准数据维护（JSON）
 
